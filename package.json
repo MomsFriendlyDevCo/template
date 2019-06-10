@@ -1,0 +1,28 @@
+{
+  "name": "@momsfriendlydevco/template",
+  "version": "1.0.0",
+  "description": "Simple ES6 template renderer",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MomsFriendlyDevCo/template.git"
+  },
+  "keywords": [
+    "es6",
+    "template",
+    "render"
+  ],
+  "author": "Matt Carter <m@ttcarter.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MomsFriendlyDevCo/template/issues"
+  },
+  "homepage": "https://github.com/MomsFriendlyDevCo/template#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  }
+}
