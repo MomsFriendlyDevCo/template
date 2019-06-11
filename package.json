@@ -1,7 +1,7 @@
 {
   "name": "@momsfriendlydevco/template",
-  "version": "1.0.0",
-  "description": "Simple ES6 template renderer",
+  "version": "1.1.0",
+  "description": "ES6 template renderer with support for dotted notation and handlebars",
   "main": "index.js",
   "scripts": {
     "test": "mocha"

@@ -16,6 +16,10 @@ describe('template()', ()=> {
 
 	it('should support handlebars format', ()=> {
 		expect(template('Hello {{name}}', {name: 'Jane'})).to.equal('Hello Jane');
+		expect(template('Baz is {{foo.bar.baz}}', {foo: {bar: {baz: 123}}})).to.equal('Baz is 123');
+		expect(template('Baz is {{foo.0.bar.0.baz.0}}', {foo: [{bar: [{baz: [123]}]}]})).to.equal('Baz is 123');
+		expect(template('Baz is {{0.bar.0.baz.0}}', [{bar: [{baz: [123]}]}])).to.equal('Baz is 123');
+		expect(template('Array traverse: ${1.2.3}', [0, [0, 0, [0, 0, 0, [123]]]])).to.equal('Array traverse: 123');
 	});
 
 	it('should render inline JavaScript', ()=> {

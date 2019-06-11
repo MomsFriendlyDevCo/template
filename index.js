@@ -8,15 +8,30 @@ var templator = (template, locals, options) => {
 templator.compile = (template, options) => {
 	var settings = {...templator.defaults, ...options};
 	if (settings.handlebars) template = template.replace(/{{(.+?)}}/g, '\${$1}');
+	if (settings.dotted) { // Tidy up dotted notation
+		template = template.replace(/\${\s*([a-z0-9\._]+?)\s*}/g, (match, expr) =>
+			'${'
+			+ expr
+				.replace(/\.([0-9]+)/g, '[$1]') // Rewrite '.123' -> '[123]'
+				.replace(/^([0-9]+)\.(.)/, (match, expr, nextChar) => '$data[' + expr + ']' + (nextChar == '[' ? '' : '.') + nextChar) // Prefix number followed by object
+				.replace(/^([0-9]+)\[/, (match, expr) => '$data[' + expr + '][') // Prefix number followed by number
+			+ '}'
+		);
+	}
 
 	var script = new vm.Script('`' + template + '`', settings && settings.script);
-	return locals => script.runInContext(vm.createContext({...locals, ...(settings && settings.globals)}));
+	return locals => script.runInContext(vm.createContext({
+		$data: locals, // Export $data so we can support numeric start rewriting (i.e. `{{0.foo}}` -> `{{$data[0].foo}}`)
+		...locals,
+		...(settings && settings.globals),
+	}));
 };
 
 templator.defaults = {
 	globals: {
 		Date, Math,
 	},
+	dotted: true,
 	handlebars: true,
 	script: {},
 };
