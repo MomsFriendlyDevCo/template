@@ -28,6 +28,16 @@ describe('template()', ()=> {
 		expect(template('Epoch time is {{new Date().getTime()}}')).to.match(/^Epoch time is (\d+)$/);
 	});
 
+	it('should handle null or undefined data access', ()=> {
+		var data = {quz: null, flarp: undefined};
+		expect(template('Foo: ${foo}', data)).to.equal(`Foo: undefined`);
+		expect(template("Bar: ${bar || 'Bar!'}", data)).to.equal(`Bar: Bar!`);
+		expect(template("Baz: ${foo || bar || baz || 'Baz!'}", data)).to.equal(`Baz: Baz!`);
+		expect(template("Quz: ${quz || 'Quz!'}", data)).to.equal(`Quz: Quz!`);
+		expect(template("Flarp: ${flarp || 'Flarp!'}", data)).to.equal(`Flarp: Flarp!`);
+		expect(()=> template("Kludge: ${kludge}", data, {safeUndefined: false})).to.throw;
+	});
+
 });
 
 describe('template.compile()', ()=> {

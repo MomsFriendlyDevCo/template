@@ -46,9 +46,10 @@ template.defaults
 -----------------
 Default options to use.
 
-| Option       | Type      | Default        | Description                                                            |
-|--------------|-----------|----------------|------------------------------------------------------------------------|
-| `globals`    | `Object`  | `{Date, Math}` | Global level objects to use when evaluating templates                  |
-| `dotted`     | `boolean` | `true`         | Enable dotted notation                                                 |
-| `handlebars` | `boolean` | `true`         | Support simple handlebars syntax (e.g. `{{variable}}`)                 |
-| `script`     | `Object`  | `{}`           | Additional settings to pass to `vm.Script()` when compiling the script |
+| Option          | Type      | Default        | Description                                                            |
+|-----------------|-----------|----------------|------------------------------------------------------------------------|
+| `globals`       | `Object`  | `{Date, Math}` | Global level objects to use when evaluating templates                  |
+| `dotted`        | `boolean` | `true`         | Enable dotted notation                                                 |
+| `handlebars`    | `boolean` | `true`         | Support simple handlebars syntax (e.g. `{{variable}}`)                 |
+| `script`        | `Object`  | `{}`           | Additional settings to pass to `vm.Script()` when compiling the script |
+| `safeUndefined` | `boolean` | `true`         | Wrap the context in a proxy so accessing top level undefined aliases doesn't throw |

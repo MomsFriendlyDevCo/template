@@ -20,11 +20,26 @@ templator.compile = (template, options) => {
 	}
 
 	var script = new vm.Script('`' + template + '`', settings && settings.script);
-	return locals => script.runInContext(vm.createContext({
-		$data: locals, // Export $data so we can support numeric start rewriting (i.e. `{{0.foo}}` -> `{{$data[0].foo}}`)
-		...locals,
-		...(settings && settings.globals),
-	}));
+
+	return locals => {
+		var context = {
+			$data: locals, // Export $data so we can support numeric start rewriting (i.e. `{{0.foo}}` -> `{{$data[0].foo}}`)
+			...locals,
+			...(settings && settings.globals),
+		};
+
+		return script.runInContext(vm.createContext(
+			settings.safeUndefined
+				?  new Proxy(context, {
+					get(obj, prop) {
+						return prop in obj
+							? obj[prop]
+							: undefined;
+					},
+				})
+				: context
+		));
+	};
 };
 
 templator.defaults = {
@@ -34,6 +49,7 @@ templator.defaults = {
 	dotted: true,
 	handlebars: true,
 	script: {},
+	safeUndefined: true,
 };
 
 module.exports = templator;
