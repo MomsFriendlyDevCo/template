@@ -19,6 +19,34 @@ template('Hello {{name}}`, {name: 'Matt'}) //= "Hello Matt" (same with handlebar
 template('Random chance: ${Math.floor(100 * Math.random())}%') //= "Random Chance: XX%"
 ```
 
+
+Safe undefined
+--------------
+By default this module enables "safe undefined" variables, which means accessing any variable from the global scope which is not defined will simply return `undefined` rather than raise an error.
+
+The objective here is that template expressions should be _forgiving_ and at least compile if a variable is not defined.
+
+
+For example:
+
+```javascript
+// With the default {safeUndefined: true}
+var template = require('@momsfriendlydevco/template');
+template('${foo}', {}); //= "undefined"
+template('${foo || 'Nope'}', {}); //= "Nope"
+template('${foo ? 'Yes' : 'No'}', {}); //= "No"
+template('${foo || bar || baz || 'Nothing'}', {baz: 'Baz!'}); //= "Baz!"
+```
+
+```javascript
+// With {safeUndefined: false}
+var template = require('@momsfriendlydevco/template');
+template('${foo}', {}); //= Raises an error "foo is undefined"
+// All of the above examples also raise as accessing "foo" is not available in the global scope
+```
+
+
+
 API
 ===
 This module exposes two main functions, the global will immediately execute a template and return its value, whereas `.compile()` will return a reusable function which can be called multiple times.
