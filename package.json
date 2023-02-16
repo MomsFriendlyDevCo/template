@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/MomsFriendlyDevCo/template#readme",
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
   }
 }
