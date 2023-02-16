@@ -1,9 +1,18 @@
 const expect = require('chai').expect;
 
-['browser', 'node'].forEach(method => {
-	let template = require(`../lib/${method}`);
-
+['browser', 'node'].map(method => {
+	let template;
 	describe(`${method.toUpperCase()}: template()`, ()=> {
+		before('force testing intance', ()=> {
+			// Hack required so that Node force reloads the required driver rather than using a defered cached version
+			// This is only ever relevent for Mocha as no-one else would ever have the node + browser versions at the same time
+			delete require.cache[`${__dirname}/../lib/${method}.js`];
+			template = require(`${__dirname}/../lib/${method}.js`);
+		});
+
+		before('check we have loaded the right driver', ()=> {
+			expect(template.defaults).to.have.property('mode', method);
+		});
 
 		it('should render simple variable replacements', ()=> {
 			let data = {
@@ -43,6 +52,14 @@ const expect = require('chai').expect;
 	});
 
 	describe(`${method.toUpperCase()}: template.compile()`, ()=> {
+		before('force testing intance', ()=> {
+			delete require.cache[`${__dirname}/../lib/${method}.js`];
+			template = require(`${__dirname}/../lib/${method}.js`);
+		});
+
+		before('check we have loaded the right driver', ()=> {
+			expect(template.defaults).to.have.property('mode', method);
+		});
 
 		it('should compile and run a template', ()=> {
 			let compiled = template.compile('Hello ${name}');
